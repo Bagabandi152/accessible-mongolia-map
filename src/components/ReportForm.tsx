@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send, X, Camera, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ModalPortal from "./ModalPortal";
 
 interface ReportFormProps {
   isOpen: boolean;
@@ -157,172 +158,174 @@ const ReportForm = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <CardHeader className="relative">
-          <CardTitle className="text-xl font-bold">
-            Саадтай орчныг мэдээлэх
-          </CardTitle>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-2 top-2"
-            onClick={onClose}
-          >
-            <X className="h-4 w-4" />
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="title">Гарчиг *</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-                placeholder="жишээ: Шатанд тусгай хэрэгцээт хүнд зориулсан налуу байхгүй"
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="location">Байршил * </Label>
-              <Input
-                id="location"
-                value={formData.location}
-                onChange={(e) =>
-                  setFormData({ ...formData, location: e.target.value })
-                }
-                placeholder="жишээ: Сүхбаатарын талбай, 1-р хороо"
-                required
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="type">Саадын төрөл *</Label>
-              <select
-                id="type"
-                value={formData.type}
-                onChange={(e) =>
-                  setFormData({ ...formData, type: e.target.value })
-                }
-                className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
-                required
-              >
-                <option value="">Сонгоно уу</option>
-                <option value="шат">Шат</option>
-                <option value="хаалга">Хаалга</option>
-                <option value="зам">Зам</option>
-                <option value="гэрэлтүүлэг">Гэрэлтүүлэг</option>
-                <option value="тэмдэг_тэмдэглэгээ">Тэмдэг тэмдэглэгээ</option>
-                <option value="бусад">Бусад</option>
-              </select>
-            </div>
-
-            {/* Image Section */}
-            <div>
-              <Label>Зураг</Label>
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleImageCapture}
-                    disabled={isCapturing}
-                    className="flex-1"
-                  >
-                    <Camera className="mr-2 h-4 w-4" />
-                    {isCapturing ? "Зураг авч байна..." : "Зураг авах"}
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() =>
-                      document.getElementById("image-upload")?.click()
-                    }
-                    className="flex-1"
-                  >
-                    <Upload className="mr-2 h-4 w-4" />
-                    Зураг оруулах
-                  </Button>
-                </div>
-
-                <input
-                  id="image-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
+    <ModalPortal>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[99999999] p-4">
+        <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <CardHeader className="relative">
+            <CardTitle className="text-xl font-bold">
+              Саадтай орчныг мэдээлэх
+            </CardTitle>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-2"
+              onClick={onClose}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="title">Гарчиг *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  placeholder="жишээ: Шатанд тусгай хэрэгцээт хүнд зориулсан налуу байхгүй"
+                  required
                 />
+              </div>
 
-                {imagePreview && (
-                  <div className="relative">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="w-full h-32 object-cover rounded-md border"
-                    />
+              <div>
+                <Label htmlFor="location">Байршил * </Label>
+                <Input
+                  id="location"
+                  value={formData.location}
+                  onChange={(e) =>
+                    setFormData({ ...formData, location: e.target.value })
+                  }
+                  placeholder="жишээ: Сүхбаатарын талбай, 1-р хороо"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="type">Саадын төрөл *</Label>
+                <select
+                  id="type"
+                  value={formData.type}
+                  onChange={(e) =>
+                    setFormData({ ...formData, type: e.target.value })
+                  }
+                  className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md text-sm"
+                  required
+                >
+                  <option value="">Сонгоно уу</option>
+                  <option value="шат">Шат</option>
+                  <option value="хаалга">Хаалга</option>
+                  <option value="зам">Зам</option>
+                  <option value="гэрэлтүүлэг">Гэрэлтүүлэг</option>
+                  <option value="тэмдэг_тэмдэглэгээ">Тэмдэг тэмдэглэгээ</option>
+                  <option value="бусад">Бусад</option>
+                </select>
+              </div>
+
+              {/* Image Section */}
+              <div>
+                <Label>Зураг</Label>
+                <div className="space-y-3">
+                  <div className="flex gap-2">
                     <Button
                       type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={removeImage}
-                      className="absolute top-1 right-1 bg-black/50 hover:bg-black/70 text-white"
+                      variant="outline"
+                      onClick={handleImageCapture}
+                      disabled={isCapturing}
+                      className="flex-1"
                     >
-                      <X className="h-4 w-4" />
+                      <Camera className="mr-2 h-4 w-4" />
+                      {isCapturing ? "Зураг авч байна..." : "Зураг авах"}
+                    </Button>
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() =>
+                        document.getElementById("image-upload")?.click()
+                      }
+                      className="flex-1"
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      Зураг оруулах
                     </Button>
                   </div>
-                )}
+
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+
+                  {imagePreview && (
+                    <div className="relative">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-32 object-cover rounded-md border"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={removeImage}
+                        className="absolute top-1 right-1 bg-black/50 hover:bg-black/70 text-white"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <Label htmlFor="description">Дэлгэрэнгүй тайлбар *</Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                placeholder="Саадын талаар дэлгэрэнгүй мэдээлэл оруулна уу..."
-                rows={4}
-                required
-              />
-            </div>
+              <div>
+                <Label htmlFor="description">Дэлгэрэнгүй тайлбар *</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  placeholder="Саадын талаар дэлгэрэнгүй мэдээлэл оруулна уу..."
+                  rows={4}
+                  required
+                />
+              </div>
 
-            <div>
-              <Label htmlFor="contactInfo">Холбоо барих мэдээлэл</Label>
-              <Input
-                id="contactInfo"
-                value={formData.contactInfo}
-                onChange={(e) =>
-                  setFormData({ ...formData, contactInfo: e.target.value })
-                }
-                placeholder="Утасны дугаар эсвэл имэйл (заавал биш)"
-              />
-            </div>
+              <div>
+                <Label htmlFor="contactInfo">Холбоо барих мэдээлэл</Label>
+                <Input
+                  id="contactInfo"
+                  value={formData.contactInfo}
+                  onChange={(e) =>
+                    setFormData({ ...formData, contactInfo: e.target.value })
+                  }
+                  placeholder="Утасны дугаар эсвэл имэйл (заавал биш)"
+                />
+              </div>
 
-            <div className="flex gap-2 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                className="flex-1"
-              >
-                Цуцлах
-              </Button>
-              <Button type="submit" className="flex-1">
-                <Send className="mr-2 h-4 w-4" />
-                Илгээх
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+              <div className="flex gap-2 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onClose}
+                  className="flex-1"
+                >
+                  Цуцлах
+                </Button>
+                <Button type="submit" className="flex-1">
+                  <Send className="mr-2 h-4 w-4" />
+                  Илгээх
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </ModalPortal>
   );
 };
 
