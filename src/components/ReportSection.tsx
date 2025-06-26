@@ -157,7 +157,7 @@ const ReportSection = ({
             <Button
               onClick={handleCurrentLocation}
               variant="outline"
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-yellow-600 px-6 py-3 h-12 text-lg font-semibold"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-yellow-600 px-6 py-3 h-12 text-lg font-semibold text-sm sm:text-sm md:text-base"
             >
               <Navigation className="mr-2 h-5 w-5" />
               Миний одоогийн байршлыг ашиглах
