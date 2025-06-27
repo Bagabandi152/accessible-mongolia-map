@@ -32,9 +32,9 @@ const Index = () => {
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
-      <div id="report-section">
+      {/* <div id="report-section">
         <ReportSection />
-      </div>
+      </div> */}
       <StatsSection />
       <ActionButtons />
       <Footer />

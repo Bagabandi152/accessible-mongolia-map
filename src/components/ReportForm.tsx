@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send, X, Camera, Upload } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import ModalPortal from "./ModalPortal";
+import MapModal from "./MapModal";
 
 interface ReportFormProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ const ReportForm = ({
   const { toast } = useToast();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [isOpenMap, setIsOpenMap] = useState(false);
 
   const handleImageCapture = async () => {
     try {
@@ -190,16 +192,67 @@ const ReportForm = ({
               </div>
 
               <div>
-                <Label htmlFor="location">Байршил * </Label>
-                <Input
-                  id="location"
-                  value={formData.location}
-                  onChange={(e) =>
-                    setFormData({ ...formData, location: e.target.value })
-                  }
-                  placeholder="жишээ: Сүхбаатарын талбай, 1-р хороо"
-                  required
-                />
+                <Label htmlFor="location">Байршил *</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="location"
+                    value={formData.location}
+                    onChange={(e) =>
+                      setFormData({ ...formData, location: e.target.value })
+                    }
+                    placeholder="жишээ: Сүхбаатарын талбай, 1-р хороо"
+                    required
+                    className="flex-1"
+                  />
+                  <Button
+                    className="px-1"
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                          (position) => {
+                            const { latitude, longitude } = position.coords;
+                            const coords = `${latitude.toFixed(
+                              6
+                            )}, ${longitude.toFixed(6)}`;
+                            setFormData((prev) => ({
+                              ...prev,
+                              location: coords,
+                            }));
+                          },
+                          (error) => {
+                            toast({
+                              title: "Байршил илэрсэнгүй",
+                              description:
+                                "Гар утасны байршлын зөвшөөрлийг шалгана уу.",
+                              variant: "destructive",
+                            });
+                          }
+                        );
+                      } else {
+                        toast({
+                          title: "Байршил дэмжихгүй",
+                          description:
+                            "Төхөөрөмж байршил тогтоох боломжгүй байна",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    Автомат
+                  </Button>
+                  <Button
+                    className="px-1"
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setIsOpenMap(true);
+                    }}
+                  >
+                    Газрын зураг
+                  </Button>
+                </div>
               </div>
 
               <div>
@@ -325,6 +378,22 @@ const ReportForm = ({
           </CardContent>
         </Card>
       </div>
+      {/* MAP Modal */}
+      {isOpenMap && (
+        <MapModal
+          isOpen={isOpenMap}
+          onClose={() => setIsOpenMap(false)}
+          onSelect={(_coords) => {
+            setIsOpenMap(false);
+            const { lat, lng } = _coords;
+            const coords = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            setFormData((prev) => ({
+              ...prev,
+              location: coords,
+            }));
+          }}
+        />
+      )}
     </ModalPortal>
   );
 };

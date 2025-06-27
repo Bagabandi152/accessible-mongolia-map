@@ -179,7 +179,7 @@ const HeroSection = () => {
         </div>
 
         {/* Map Section */}
-        <div
+        {/* <div
           className="mt-8 sm:mt-12 animate-scale-in"
           style={{ animationDelay: "0.9s" }}
         >
@@ -187,7 +187,7 @@ const HeroSection = () => {
             Мэдээлсэн байршлууд
           </h3>
           <Map reports={reports} />
-        </div>
+        </div> */}
 
         {/* Main Content Card */}
         <div
@@ -253,7 +253,7 @@ const HeroSection = () => {
 
         {/* CTA Buttons */}
         <div
-          className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mt-8 sm:mt-12 animate-fade-in px-4"
+          className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mt-8 sm:mt-12 animate-fade-in px-4 mb-4"
           style={{ animationDelay: "1.2s" }}
         >
           <Button

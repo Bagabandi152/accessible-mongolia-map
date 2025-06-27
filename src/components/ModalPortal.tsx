@@ -1,9 +1,16 @@
-// ModalPortal.tsx
 import { createPortal } from "react-dom";
 
-const ModalPortal = ({ children }: { children: React.ReactNode }) => {
+interface ModalPortalProps {
+  children: React.ReactNode;
+  zIndex?: number;
+}
+
+const ModalPortal = ({ children, zIndex = 99 }: ModalPortalProps) => {
   const modalRoot = document.getElementById("modal-root") ?? document.body;
-  return createPortal(children, modalRoot);
+  return createPortal(
+    <div style={{ zIndex, position: "relative" }}>{children}</div>,
+    modalRoot
+  );
 };
 
 export default ModalPortal;

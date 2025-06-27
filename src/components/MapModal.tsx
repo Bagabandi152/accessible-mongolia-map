@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import { LatLngExpression } from "leaflet";
+import { LatLngExpression, Map as LeafletMap } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Button } from "./ui/button";
 import ModalPortal from "./ModalPortal";
@@ -31,12 +31,29 @@ const MapModal = ({ isOpen, onClose, onSelect }: MapModalProps) => {
     lat: number;
     lng: number;
   } | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+
+  useEffect(() => {
+    if (isOpen && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const userLocation = { lat: latitude, lng: longitude };
+          setMarkerPos(userLocation);
+          mapRef.current?.setView(userLocation, 13);
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        }
+      );
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <ModalPortal>
-      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+    <ModalPortal zIndex={100}>
+      <div className="fixed inset-0 z-[60] bg-black bg-opacity-50 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-lg w-[90%] max-w-3xl overflow-hidden">
           <div className="p-4 border-b flex justify-between items-center">
             <h2 className="text-lg font-semibold">Байршил сонгох</h2>
@@ -52,6 +69,7 @@ const MapModal = ({ isOpen, onClose, onSelect }: MapModalProps) => {
               center={defaultCenter}
               zoom={13}
               className="h-full w-full z-0"
+              ref={(mapInstance) => (mapRef.current = mapInstance)}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -79,7 +97,7 @@ const MapModal = ({ isOpen, onClose, onSelect }: MapModalProps) => {
                   : "bg-blue-200 text-blue-600 cursor-not-allowed"
               } font-semibold py-2 px-4 rounded`}
             >
-              Мэдээлэл илгээх
+              Байршил авах
             </Button>
           </div>
         </div>
