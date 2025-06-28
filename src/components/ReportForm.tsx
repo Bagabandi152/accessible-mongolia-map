@@ -3,16 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Send, X, Camera, Upload } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Report } from "@/contexts/ReportContext";
 import ModalPortal from "./ModalPortal";
 import MapModal from "./MapModal";
 
 interface ReportFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (report: any) => void;
+  onSubmit: (report: Report) => void;
   initialLocation?: string;
 }
 

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import ReportForm from "./ReportForm";
-import Map from "./Map";
+// import Map from "./Map";
 import Functions from "@/constants/Functions";
 import { useToast } from "@/hooks/use-toast";
 import { uploadFile } from "@/services/UploadFileService";
@@ -21,6 +21,8 @@ import {
   ReportDocName,
 } from "@/contexts/ReportContext";
 import MapModal from "./MapModal";
+import MapLocation from "./MapLocation";
+import ReportStats from "./ReportStats";
 
 const HeroSection = () => {
   const { toast } = useToast();
@@ -138,7 +140,7 @@ const HeroSection = () => {
 
         {/* Statistics Cards */}
         <div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto mt-8 sm:mt-12 animate-scale-in mx-4"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mt-8 sm:mt-12 animate-scale-in mx-auto"
           style={{ animationDelay: "0.6s" }}
         >
           <Card className="bg-white/90 backdrop-blur-sm shadow-lg border-0">
@@ -179,19 +181,36 @@ const HeroSection = () => {
         </div>
 
         {/* Map Section */}
-        {/* <div
+        <div
           className="mt-8 sm:mt-12 animate-scale-in"
           style={{ animationDelay: "0.9s" }}
         >
           <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
             Мэдээлсэн байршлууд
           </h3>
-          <Map reports={reports} />
-        </div> */}
+          {/* <Map reports={reports} /> */}
+          <MapLocation selectedMarkers={reports
+            .map((report) => {
+              const [latStr, lngStr] = report.location.split(",");
+              const lat = parseFloat(latStr);
+              const lng = parseFloat(lngStr);
+              if (isNaN(lat) || isNaN(lng)) return null;
+              return { coords: { lat, lng }, title: report.description };
+            })
+            .filter((marker): marker is { coords: { lat: number; lng: number }, title: "string" } => marker !== null)} />
+        </div>
+
+        {/* Report Statistics */}
+        <div
+          className="bg-white/80 backdrop-blur-lg rounded-xl sm:rounded-2xl p-0 max-w-5xl mx-auto border border-white/20 mt-8 sm:mt-12 animate-scale-in"
+          style={{ animationDelay: "1.2s" }}
+        >
+          <ReportStats weeklyReports={weeklyReports} monthlyReports={monthlyReports} totalReports={totalReports} reports={reports} />
+        </div>
 
         {/* Main Content Card */}
         <div
-          className="bg-white/80 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 max-w-5xl mx-auto shadow-2xl border border-white/20 mt-8 sm:mt-12 animate-scale-in mx-4"
+          className="bg-white/80 backdrop-blur-lg rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 max-w-5xl mx-auto shadow-2xl border border-white/20 mt-8 sm:mt-12 animate-scale-in"
           style={{ animationDelay: "1.2s" }}
         >
           <div className="space-y-4 sm:space-y-6">

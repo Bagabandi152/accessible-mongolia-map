@@ -35,7 +35,7 @@ const indexQuery = async (
   docname: string,
   field: string,
   operator: WhereFilterOp,
-  value: any
+  value: string
 ): Promise<(DocumentData & { id: string })[]> => {
   const qr = query(collectionGroup(db, docname), where(field, operator, value));
   const res = await getDocs(qr);
@@ -96,6 +96,22 @@ const deleteFile = async (path: string): Promise<void> => {
   await deleteObject(fileRef);
 };
 
+/**To convert a timestamp (ISO 8601 or Date object) to the format 'YYYY-MM-DD HH:MM:SS' */
+function formatTimestamp(timestamp: string | Date): string {
+  const date = new Date(timestamp);
+
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1); // Months start from 0
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  const seconds = pad(date.getSeconds());
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
 const Functions = {
   index,
   indexQuery,
@@ -106,6 +122,7 @@ const Functions = {
   fileList,
   getFileUrl,
   deleteFile,
+  formatTimestamp
 };
 
 export default Functions;

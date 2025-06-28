@@ -36,7 +36,7 @@ const NavigationHeader = ({ onReportClick }: NavigationHeaderProps) => {
                 ID
               </span>
             </div> */}
-            <img className="w-6 h-6 sm:w-8 sm:h-8" src="/inclusive-data.jpg" alt="inclusive-data." />
+            <img className="w-6 h-6 sm:w-8 sm:h-8" src="/inclusive-data-removebg.png" alt="inclusive-data." />
             <span className="text-lg sm:text-xl font-bold text-gray-900 truncate">
               inclusivedata.mn
             </span>
