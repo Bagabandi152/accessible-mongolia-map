@@ -9,6 +9,7 @@ import { Send, X, Camera, Upload } from "lucide-react";
 import { Report } from "@/contexts/ReportContext";
 import ModalPortal from "./ModalPortal";
 import MapModal from "./MapModal";
+import WebcamCaptureModal from "./WebcamCaptureModal";
 
 interface ReportFormProps {
   isOpen: boolean;
@@ -33,13 +34,14 @@ const ReportForm = ({
   });
   const { toast } = useToast();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isCapturing, setIsCapturing] = useState(false);
+  // const [isCapturing, setIsCapturing] = useState(false);
   const [isOpenMap, setIsOpenMap] = useState(false);
+  const [isCaptureModalOpen, setIsCaptureModalOpen] = useState(false);
 
   const handleImageCapture = async () => {
     try {
-      setIsCapturing(true);
-
+      setIsCaptureModalOpen(true);
+      // setIsCapturing(true);
       // Get location permission first
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -56,41 +58,41 @@ const ReportForm = ({
         );
       }
 
-      // Capture image
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
+      // // Capture image
+      // const stream = await navigator.mediaDevices.getUserMedia({
+      //   video: { facingMode: "environment" },
+      // });
 
-      const video = document.createElement("video");
-      video.srcObject = stream;
-      video.play();
+      // const video = document.createElement("video");
+      // video.srcObject = stream;
+      // video.play();
 
-      video.onloadedmetadata = () => {
-        const canvas = document.createElement("canvas");
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+      // video.onloadedmetadata = () => {
+      //   const canvas = document.createElement("canvas");
+      //   canvas.width = video.videoWidth;
+      //   canvas.height = video.videoHeight;
 
-        const ctx = canvas.getContext("2d");
-        ctx?.drawImage(video, 0, 0);
+      //   const ctx = canvas.getContext("2d");
+      //   ctx?.drawImage(video, 0, 0);
 
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              const file = new File([blob], "photo.jpg", {
-                type: "image/jpeg",
-              });
-              setFormData((prev) => ({ ...prev, image: file }));
-              setImagePreview(URL.createObjectURL(file));
-            }
-          },
-          "image/jpeg",
-          0.8
-        );
+      //   canvas.toBlob(
+      //     (blob) => {
+      //       if (blob) {
+      //         const file = new File([blob], "photo.jpg", {
+      //           type: "image/jpeg",
+      //         });
+      //         setFormData((prev) => ({ ...prev, image: file }));
+      //         setImagePreview(URL.createObjectURL(file));
+      //       }
+      //     },
+      //     "image/jpeg",
+      //     0.8
+      //   );
 
-        // Stop camera
-        stream.getTracks().forEach((track) => track.stop());
-        setIsCapturing(false);
-      };
+      //   // Stop camera
+      //   stream.getTracks().forEach((track) => track.stop());
+      //   setIsCapturing(false);
+      // };
     } catch (error) {
       console.error("Error accessing camera:", error);
       toast({
@@ -98,12 +100,19 @@ const ReportForm = ({
         description: "Камер ашиглахад алдаа гарлаа",
         variant: "destructive",
       });
-      setIsCapturing(false);
+      // setIsCapturing(false);
     }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, image: file }));
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleCaptureImage = (file: File) => {
     if (file) {
       setFormData((prev) => ({ ...prev, image: file }));
       setImagePreview(URL.createObjectURL(file));
@@ -286,13 +295,13 @@ const ReportForm = ({
                       type="button"
                       variant="outline"
                       onClick={handleImageCapture}
-                      disabled={isCapturing}
+                      // disabled={isCapturing}
                       className="flex-1"
                     >
-                      <Camera className="mr-2 h-4 w-4" />
-                      {isCapturing ? "Зураг авч байна..." : "Зураг авах"}
+                      {/* <Camera className="mr-2 h-4 w-4" /> */}
+                      {/* {isCapturing ? "Зураг авч байна..." : "Зураг авах"} */}
+                      Зураг авах
                     </Button>
-
                     <Button
                       type="button"
                       variant="outline"
@@ -393,6 +402,14 @@ const ReportForm = ({
               location: coords,
             }));
           }}
+        />
+      )}
+      {/* Web camera capture modal */}
+      {isCaptureModalOpen && (
+        <WebcamCaptureModal
+          isOpen={isCaptureModalOpen}
+          onClose={() => setIsCaptureModalOpen(false)}
+          onCapture={handleCaptureImage}
         />
       )}
     </ModalPortal>
