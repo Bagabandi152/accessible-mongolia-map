@@ -86,14 +86,13 @@ const WebcamCaptureModal: React.FC<WebcamCaptureModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="z-[105] w-max-lg h-[84vh] p-0 bg-background flex flex-col">
+      <DialogContent className="z-[105] w-max-lg h-[95vh] my-auto p-0 bg-background flex flex-col">
         <div className="p-4">
           <DialogTitle>Зураг авах</DialogTitle>
           <DialogDescription className="mt-2">
             Та доорх камерын харагдаж буй хэсгээс зураг авч хадгалах боломжтой.
           </DialogDescription>
         </div>
-
         <div className="flex-1 flex flex-col items-center justify-center gap-4 px-4 pb-4">
           <video
             ref={videoRef}
