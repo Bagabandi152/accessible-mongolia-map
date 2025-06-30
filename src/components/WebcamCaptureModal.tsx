@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import ModalPortal from "./ModalPortal";
 
 interface WebcamCaptureModalProps {
   isOpen: boolean;
@@ -99,31 +100,33 @@ const WebcamCaptureModal: React.FC<WebcamCaptureModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md w-full">
-        <DialogTitle>Зураг авах</DialogTitle>
-        <DialogDescription>
-          Та доорх камерын харагдаж буй хэсгээс зураг авч хадгалах боломжтой.
-        </DialogDescription>
+    <ModalPortal zIndex={101}>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-md w-full">
+          <DialogTitle>Зураг авах</DialogTitle>
+          <DialogDescription>
+            Та доорх камерын харагдаж буй хэсгээс зураг авч хадгалах боломжтой.
+          </DialogDescription>
 
-        <div className="flex flex-col items-center gap-4 mt-4">
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            className="w-full rounded-md"
-          />
-          <div className="flex justify-between w-full gap-4">
-            <Button variant="outline" className="w-full" onClick={onClose}>
-              Цуцлах
-            </Button>
-            <Button className="w-full" onClick={handleCapture}>
-              Зураг авах
-            </Button>
+          <div className="flex flex-col items-center gap-4 mt-4">
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              className="w-full rounded-md"
+            />
+            <div className="flex justify-between w-full gap-4">
+              <Button variant="outline" className="w-full" onClick={onClose}>
+                Цуцлах
+              </Button>
+              <Button className="w-full" onClick={handleCapture}>
+                Зураг авах
+              </Button>
+            </div>
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+    </ModalPortal>
   );
 };
 
