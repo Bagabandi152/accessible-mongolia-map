@@ -98,7 +98,7 @@ const HeroSection = () => {
   const totalReports = reports.length;
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center px-0 sm:px-6 lg:px-8 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-cyan-50 to-violet-100 animate-pulse opacity-60"></div>
 

@@ -93,7 +93,7 @@ const FeaturesSection = () => {
         </div>
 
         {/* Bottom CTA Section */}
-        <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-8 sm:p-12 shadow-xl border border-white/20 mx-4 sm:mx-0">
+        <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-8 sm:p-12 shadow-xl border border-white/20 mx-0 sm:mx-0">
           <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-6">
             <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-red-500 mb-2 sm:mb-0 sm:mr-3 animate-pulse" />
             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 text-center">
