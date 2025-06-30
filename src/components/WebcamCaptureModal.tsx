@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import ModalPortal from "./ModalPortal";
 
 interface WebcamCaptureModalProps {
   isOpen: boolean;
@@ -22,7 +21,6 @@ const WebcamCaptureModal: React.FC<WebcamCaptureModalProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-
   const { toast } = useToast();
 
   useEffect(() => {
@@ -39,27 +37,16 @@ const WebcamCaptureModal: React.FC<WebcamCaptureModalProps> = ({
         streamRef.current = stream;
       } catch (error: any) {
         console.error("Camera error:", error.name, error.message);
-        if (error.name === "NotFoundError") {
-          toast({
-            title: "Алдаа",
-            description:
-              "Камер олдсонгүй. Та төхөөрөмжийнхөө камерын тохиргоог шалгана уу.",
-            variant: "destructive",
-          });
-        } else if (error.name === "NotAllowedError") {
-          toast({
-            title: "Алдаа",
-            description:
-              "Камерт хандалт олгогдоогүй байна. Та зөвшөөрөл олгоно уу.",
-            variant: "destructive",
-          });
-        } else {
-          toast({
-            title: "Алдаа",
-            description: "Камерт холбогдох үед алдаа гарлаа.",
-            variant: "destructive",
-          });
-        }
+        toast({
+          title: "Алдаа",
+          description:
+            error.name === "NotFoundError"
+              ? "Камер олдсонгүй. Та төхөөрөмжийнхөө камерын тохиргоог шалгана уу."
+              : error.name === "NotAllowedError"
+              ? "Камерт хандалт олгогдоогүй байна. Та зөвшөөрөл олгоно уу."
+              : "Камерт холбогдох үед алдаа гарлаа.",
+          variant: "destructive",
+        });
         onClose();
       }
     };
@@ -82,9 +69,7 @@ const WebcamCaptureModal: React.FC<WebcamCaptureModalProps> = ({
     canvas.height = video.videoHeight;
 
     const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.drawImage(video, 0, 0);
-    }
+    if (ctx) ctx.drawImage(video, 0, 0);
 
     canvas.toBlob(
       (blob) => {
@@ -100,33 +85,33 @@ const WebcamCaptureModal: React.FC<WebcamCaptureModalProps> = ({
   };
 
   return (
-    <ModalPortal zIndex={101}>
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="max-w-md w-full">
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="z-[105] w-max-lg h-[84vh] p-0 bg-background flex flex-col">
+        <div className="p-4">
           <DialogTitle>Зураг авах</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="mt-2">
             Та доорх камерын харагдаж буй хэсгээс зураг авч хадгалах боломжтой.
           </DialogDescription>
+        </div>
 
-          <div className="flex flex-col items-center gap-4 mt-4">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="w-full rounded-md"
-            />
-            <div className="flex justify-between w-full gap-4">
-              <Button variant="outline" className="w-full" onClick={onClose}>
-                Цуцлах
-              </Button>
-              <Button className="w-full" onClick={handleCapture}>
-                Зураг авах
-              </Button>
-            </div>
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 px-4 pb-4">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="w-full h-full object-contain rounded-md"
+          />
+          <div className="flex justify-between w-full gap-4 mt-4">
+            <Button variant="outline" className="w-full" onClick={onClose}>
+              Цуцлах
+            </Button>
+            <Button className="w-full" onClick={handleCapture}>
+              Зураг авах
+            </Button>
           </div>
-        </DialogContent>
-      </Dialog>
-    </ModalPortal>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
