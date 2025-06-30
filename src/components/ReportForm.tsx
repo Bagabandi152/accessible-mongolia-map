@@ -171,7 +171,7 @@ const ReportForm = ({
 
   return (
     <ModalPortal>
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[99999999] p-4">
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
         <Card className="w-full max-w-md max-h-[90vh] overflow-y-auto">
           <CardHeader className="relative">
             <CardTitle className="text-xl font-bold">
