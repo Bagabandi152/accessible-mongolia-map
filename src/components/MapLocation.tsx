@@ -4,14 +4,14 @@ import { LatLngExpression, Map as LeafletMap } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 interface MapLocationProps {
-  selectedMarkers: { coords: { lat: number; lng: number }; title: string }[];
+  selectedMarkers: { coords: { lat: number; lng: number }; title: string }[]; // `"string"` биш `string`
 }
 
 const defaultCenter: LatLngExpression = [47.9186, 106.9178]; // Ulaanbaatar center
 
 const MapLocation = ({ selectedMarkers }: MapLocationProps) => {
   const mapRef = useRef<LeafletMap | null>(null);
-  const [visibleTooltipIndex, setVisibleTooltipIndex] = useState<number | null>(
+  const [activeTooltipIndex, setActiveTooltipIndex] = useState<number | null>(
     null
   );
 
@@ -32,12 +32,14 @@ const MapLocation = ({ selectedMarkers }: MapLocationProps) => {
             key={index}
             position={marker.coords}
             eventHandlers={{
-              click: () => setVisibleTooltipIndex(index),
+              click: () => setActiveTooltipIndex(index),
             }}
           >
-            <Tooltip permanent direction="top" offset={[0, -10]}>
-              {visibleTooltipIndex === index ? marker.title : ""}
-            </Tooltip>
+            {activeTooltipIndex === index && (
+              <Tooltip direction="top" offset={[0, -10]} permanent>
+                {marker.title}
+              </Tooltip>
+            )}
           </Marker>
         ))}
       </MapContainer>
