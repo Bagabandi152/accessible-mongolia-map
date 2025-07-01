@@ -40,7 +40,7 @@ const Index = () => {
       <Footer />
       
       {/* Floating AI Chatbot */}
-      <AIChatbot />
+      {/* <AIChatbot /> */}
     </div>
   );
 };
